@@ -52,18 +52,17 @@ onMount(async () => {
 // funcion que llama al evento submit del formulario
 function interpolar() {
   console.table(data);
-  renderGraf();
   addValuesX();
   addValuesDefault();
   getSalto();
   completeValues();
-  valuesDescendente();
   deleteZero();
+  renderGraf();
 }
 
 // datas
 
-let data = {x1: 1, y1: 4, x2: 5, y2: 2, x: 3};
+let data = {x1: 1, y1: 2, x2: 5, y2: 4, x: 3};
 let valoresX = [];
 let valoresY = [];
 let salto = 0;
@@ -111,9 +110,11 @@ function getSalto() {
 function completeValues() {
   if (parseFloat(data.y1) > parseFloat(data.y2)) {
     console.log('%c Es de orden descendente', 'color:orange');
+    valuesDescendente();
   }
   if (parseFloat(data.y1) < parseFloat(data.y2)) {
     console.log('%c Es de orden ascendente', 'color:orange');
+    valuesAscendente();
   }
 }
 
@@ -125,6 +126,21 @@ function valuesDescendente() {
       valoresY[i] = resta - salto;
       resta = resta - salto;
       console.log(i + ' ' + valoresY[i]);
+    }
+  }
+
+  console.log(`Valores totales: ${valoresY}`);
+}
+
+//ASCENDENTE
+function valuesAscendente() {
+  let resta = parseFloat(data.y1);
+
+  for (let i = 0; i < valoresY.length; i++) {
+    if (i <= parseFloat(data.y2) && i >= parseFloat(data.y1)) {
+      valoresY[i] = resta + salto;
+      resta = resta + salto;
+      console.log(`[${i}] => ${valoresY[i]}`);
     }
   }
 
@@ -151,9 +167,10 @@ function renderGraf() {
           label: 'interpolacion lineal',
           backgroundColor: 'transparent',
           borderColor: '#2a2a2a',
-          data: valoresY.reverse(), // [1, 2, 3, 4],
-          pointRadius: 5,
-          pointBackgroundColor: 'red',
+          data: valoresY, // [1, 2, 3, 4],
+          pointRadius: 6,
+          pointBackgroundColor: '#2a2a2a',
+          pointHoverRadius: 6,
           lineTension: 0
         }
       ]
@@ -164,7 +181,8 @@ function renderGraf() {
         yAxes: [{
           ticks: {
             suggestedMin: 0,
-            suggestedMax: ((parseFloat(data.y2) > parseFloat(data.y1)) ? parseFloat(data.y2) : parseFloat(data.y1)) + 1
+            suggestedMax: ((parseFloat(data.y2) > parseFloat(data.y1)) ? parseFloat(data.y2) : parseFloat(data.y1)) + 1,
+            // stepSize: salto
           }
         }],
       }
