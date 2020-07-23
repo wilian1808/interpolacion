@@ -37,6 +37,10 @@
         <input class="form__input" type="text" name="" id="" bind:value={ data.y }>
       </div>
 
+
+      <div class="description">
+        La interpolacion lineal es en el punto: <label>({ data.x }, { data.y })</label>
+      </div>
     </form>
     
     <div class="grafico">
@@ -139,13 +143,9 @@ onMount(async () => {
 
 // funcion que llama al evento submit del formulario
 function interpolar() {
+  valoresY = [];
+  valoresX = [];
   console.table(data);
-  interpolarData();
-  addValuesX();
-  addValuesDefault();
-  getSalto();
-  completeValues();
-  deleteZero();
   renderGraf();
 }
 
@@ -280,6 +280,13 @@ function deleteZero() {
 
 // funcion que renderiza el grafico
 function renderGraf() {
+  interpolarData();
+  addValuesX();
+  addValuesDefault();
+  getSalto();
+  completeValues();
+  deleteZero();
+
   let ctx = document.getElementById('myChart').getContext('2d');
 
   let chart = new Chart(ctx, {
